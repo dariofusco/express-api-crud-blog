@@ -73,7 +73,7 @@ const create = (req, res) => {
 
     res.format({
         html: () => {
-            res.send(`Nuovo post ${title} creato`);
+            res.redirect(`/${newPost.slug}`);
         },
         json: () => {
             res.json(newPost);
