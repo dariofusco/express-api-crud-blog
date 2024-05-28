@@ -65,6 +65,7 @@ const create = (req, res) => {
         title,
         slug,
         content,
+        image: req.file.filename,
         tags
     }
 
@@ -72,14 +73,18 @@ const create = (req, res) => {
 
     res.format({
         html: () => {
-            //res.redirect(`/${newPost.title}`);
+            res.send(`Nuovo post ${title} creato`);
         },
         json: () => {
-            //res.status(406).json({error: "Not Acceptable",});
             res.json(newPost);
         }
     });
 
+}
+
+const deleteImage = (fileName) => {
+    const filePath = path.join(__dirname, '../public', fileName);
+    fs.unlinkSync(filePath);
 }
 
 const destroy = (req, res) => {
@@ -87,6 +92,7 @@ const destroy = (req, res) => {
     const { slug } = req.params;
     const postToDelete = posts.find(post => post.slug === slug);
 
+    deleteImage(postToDelete.image);
     updatePosts(posts.filter(post => post.slug !== postToDelete.slug));
 
     res.send(`Post con slug ${slug} eliminato con successo.`);
